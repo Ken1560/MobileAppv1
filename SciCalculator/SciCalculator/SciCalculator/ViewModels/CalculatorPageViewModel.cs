@@ -25,7 +25,7 @@ namespace ViewModels
         [RelayCommand]
         private void Calculate()
         {
-            if (InputText.Length == 0)
+            if (string.IsNullOrEmpty(InputText))
             {
                 return;
             }
@@ -41,10 +41,14 @@ namespace ViewModels
                 var inputString = NormalizeInputString();
                 var expresson = new NCalc.Expression(inputString);
                 var result = expresson.Evaluate();
+
+                CalculatedResult = result.ToString();
+                InputText = CalculatedResult;
             }
             catch (Exception ex)
             {
                 CalculatedResult = "NaN";
+                Console.WriteLine($"Error: {ex.Message}");
             }
         }
 
@@ -81,7 +85,7 @@ namespace ViewModels
         [RelayCommand]
         private void Backspace()
         {
-            if (InputText.Length > null)
+            if (!string.IsNullOrEmpty(InputText))
             {
                 InputText = InputText.Substring(0, InputText.Length - 1);
             }
@@ -118,7 +122,7 @@ namespace ViewModels
         [RelayCommand]
         private void ScientificOperator(string op)
         {
-            InputText += $"{op}(";
+            InputText += $"{op}";
             isSciOpWaiting = true;
         }
     }
